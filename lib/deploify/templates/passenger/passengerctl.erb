@@ -1,0 +1,10 @@
+#!/bin/bash
+
+APPLICATION=<%= application %>
+APP_PORT=<%= passenger_port %>
+RVM_RUBY=<%= rvm_ruby_string %>
+ENVIRONMENT=<%= rails_env %>
+INSTANCES_MIN=<%= passenger_min_instances %>
+INSTANCES_MAX=<%= passenger_max_pool_size %>
+
+source /usr/local/lib/passengerctl $1

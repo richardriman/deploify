@@ -1,0 +1,5 @@
+check process <%= app_server_type %>-<%= application %> with pidfile <%= shared_path %>/pids/<%= app_server_type %>.pid
+  start program = "service <%= app_server_type %>-<%= application %> start" with timeout <%= monit_timeout_interval %> seconds
+  stop program = "service <%= app_server_type %>-<%= application %> stop"
+  if 5 restarts within 5 cycles then timeout
+  group <%= app_server_type %>

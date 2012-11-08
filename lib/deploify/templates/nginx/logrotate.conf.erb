@@ -1,0 +1,12 @@
+<%= shared_path %>/log/access.log, <%= shared_path %>/log/error.log {
+  daily
+  missingok
+  rotate 15
+  compress
+  delaycompress
+  sharedscripts
+  dateext
+  postrotate
+    service nginx reload
+  endscript
+}

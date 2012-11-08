@@ -1,0 +1,68 @@
+USER=app_${APPLICATION}
+APP_DIR=/var/www/${APPLICATION}/current
+PIDFILE=${APP_DIR}/tmp/pids/passenger.pid
+LOGFILE=${APP_DIR}/log/passenger.log
+
+if [ "$APP_PORT" = "" ]; then
+  CMD_START="cd $APP_DIR; rvm use $RVM_RUBY; passenger start $APP_DIR --socket ${APP_DIR}/tmp/pids/passenger.sock -e $ENVIRONMENT --min-instances=$INSTANCES_MIN --max-pool-size=$INSTANCES_MAX --pid-file $PIDFILE --log-file $LOGFILE -d"
+  CMD_STOP="cd $APP_DIR; rvm use $RVM_RUBY; passenger stop $APP_DIR --pid-file $PIDFILE"
+else
+  CMD_START="cd $APP_DIR; rvm use $RVM_RUBY; passenger start $APP_DIR --port $APP_PORT -e $ENVIRONMENT --min-instances=$INSTANCES_MIN --max-pool-size=$INSTANCES_MAX --pid-file $PIDFILE --log-file $LOGFILE -d"
+  CMD_STOP="cd $APP_DIR; rvm use $RVM_RUBY; passenger stop $APP_DIR --pid-file $PIDFILE"
+fi
+
+function start() {
+  echo "Starting passenger for application '${APPLICATION}'"
+  if [ -f ${PIDFILE} ]; then
+    kill -0 `cat ${PIDFILE}`
+    if [ "$?" == "1" ]; then
+      rm ${APP_DIR}/tmp/pids/passenger.*
+    else
+      echo "Passenger already running with PID "`cat ${PIDFILE}`
+      return 1
+    fi
+  fi
+  su - $USER -c "$CMD_START"
+}
+
+function stop() {
+  echo "Stopping passenger for application '${APPLICATION}'"
+  su - $USER -c "$CMD_STOP"
+}
+
+function graceful() {
+  echo "Graceful (if possible) restart for application '${APPLICATION}'"
+  if [ -f ${PIDFILE} ]; then
+    kill -0 `cat ${PIDFILE}`
+    if [ "$?" == "0" ]; then
+      echo "Graceful restart for application '${APPLICATION}'"
+      touch ${APP_DIR}/tmp/restart.txt
+      return 0
+    else
+      echo "Oops! Pid File exists, but not workers. Restarting."
+      start
+    fi
+  else
+    start
+  fi
+}
+
+case "$1" in
+  "start")
+    start
+    ;;
+  "stop")
+    stop
+    ;;
+  "restart")
+    stop
+    start
+    ;;
+  "graceful")
+    graceful
+    ;;
+  *)
+    echo "Usage: $0 start|stop|restart|graceful" >&2
+    exit 3
+    ;;
+esac

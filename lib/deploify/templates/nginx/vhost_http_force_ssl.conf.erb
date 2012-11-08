@@ -1,0 +1,79 @@
+upstream <%= nginx_upstream_name %> {
+<% nginx_upstream_servers.each do |srv| -%>
+  server <%= srv %>;
+<% end -%>
+}
+
+server {
+  listen <%= nginx_vhost_listen_ip %>:80;
+  server_name <%= domain %> <%= Array(web_server_aliases).join(' ') %>;
+
+  location / {
+    rewrite ^ https://<%= domain %>$request_uri? permanent;
+  }
+}
+
+server {
+  listen <%= nginx_vhost_listen_ip %>:443;
+  server_name <%= domain %> <%= Array(web_server_aliases).join(' ') %>;
+  root <%= deploy_to %>/current/public;
+  client_max_body_size <%= nginx_client_max_body_size %>;
+  access_log <%= shared_path %>/log/access.log;
+  error_log <%= shared_path %>/log/error.log;
+
+  ssl on;
+  ssl_certificate <%= deploy_to %>/nginx/<%= rails_env %>.crt;
+  ssl_certificate_key <%= deploy_to %>/nginx/<%= rails_env %>.key;
+
+  <% if force_domain_with_www -%>
+  if ($host !~* ^www.<%= domain %>$) {
+    rewrite ^(.*) https://www.<%= domain %>$1 permanent;
+  }
+  <% end -%>
+
+  location / {
+    <% if nginx_secured_site -%>
+    auth_basic "Limited access";
+    auth_basic_user_file <%= "#{deploy_to}/nginx/.htaccess" %>;
+    <% end -%>
+    proxy_pass http://<%= nginx_upstream_name %>;
+    proxy_redirect off;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto https;
+  }
+
+  # This allows people to use images and css in their maintenance.html file
+  if ($request_filename ~* \.(css|jpg|gif|png)$) {
+    break;
+  }
+
+  # Rewrite all the requests to the maintenance.html page if it exists.
+  if (-f $document_root/system/maintenance.html) {
+    return 503;
+  }
+
+  # set Expire header on assets: see http://developer.yahoo.com/performance/rules.html#expires
+  location ~ ^/(images|javascripts|stylesheets)/ {
+    expires max;
+    error_page 404 = @fallback;
+  }
+
+  location @fallback {
+    proxy_pass http://<%= nginx_upstream_name %>;
+    proxy_redirect off;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto https;
+  }
+
+  error_page 404 /404.html;
+  error_page 500 502 504 /500.html;
+
+  error_page 503 @503;
+  location @503 {
+    rewrite  ^(.*)$ /system/maintenance.html break;
+  }
+}

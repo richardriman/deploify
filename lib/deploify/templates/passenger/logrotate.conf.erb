@@ -1,0 +1,12 @@
+<%= shared_path %>/log/<%= rails_env %>.log, <%= shared_path %>/log/passenger.log {
+  daily
+  missingok
+  rotate 15
+  compress
+  delaycompress
+  sharedscripts
+  dateext
+  postrotate
+    touch <%= deploy_to %>/current/tmp/restart.txt
+  endscript
+}
