@@ -1,2 +1,2 @@
-deploify - Capistrnao based and deprec inspired deploy gem
+deploify - capistrano based and deprec inspired deploy gem
 ================================================================================
