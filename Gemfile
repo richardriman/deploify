@@ -6,8 +6,7 @@ group :development do
   gem "rdoc", "~> 3.12"
   gem "jeweler", "~> 1.8.4"
   gem "rcov", ">= 0"
+  gem "bundler", ">= 1.0.3"
+  gem "capistrano", "~> 2.13.5"
+  gem "rvm-capistrano", "~> 1.2.7"
 end
-
-gem "bundler", ">= 1.0.3"
-gem "capistrano", "~> 2.13.5"
-gem "rvm-capistrano", "~> 1.2.7"
