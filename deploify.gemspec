@@ -5,79 +5,82 @@
 
 Gem::Specification.new do |s|
   s.name = "deploify"
-  s.version = "0.1.1"
+  s.version = "0.1.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Richard R\314\214i\314\201man"]
-  s.date = "2012-11-07"
+  s.date = "2012-11-23"
   s.description = "Capistrano based and deprec inspired deploy solution served as a gem."
   s.email = "riman.richard@gmail.com"
   s.extra_rdoc_files = [
     "LICENSE.txt",
+    "README.md",
     "README.rdoc"
   ]
   s.files = [
     ".document",
-    ".rvmrc",
     "Gemfile",
     "Gemfile.lock",
     "LICENSE.txt",
+    "README.md",
     "README.rdoc",
     "Rakefile",
     "VERSION",
-    "lib/plugins/all.rb",
-    "lib/plugins/apt.rb",
-    "lib/plugins/std.rb",
+    "deploify.gemspec",
     "lib/deploify.rb",
     "lib/deploify/capistrano_extensions.rb",
     "lib/deploify/recipes.rb",
+    "lib/deploify/recipes/deploify.rb",
+    "lib/deploify/recipes/mongodb.rb",
     "lib/deploify/recipes/monit.rb",
     "lib/deploify/recipes/mysql.rb",
     "lib/deploify/recipes/nginx.rb",
     "lib/deploify/recipes/passenger.rb",
+    "lib/deploify/recipes/puma.rb",
     "lib/deploify/recipes/rails.rb",
-    "lib/deploify/recipes/deploify.rb",
     "lib/deploify/templates/monit/monit.conf.erb",
     "lib/deploify/templates/nginx/logrotate.conf.erb",
     "lib/deploify/templates/nginx/vhost_http_force_ssl.conf.erb",
     "lib/deploify/templates/nginx/vhost_http_only.conf.erb",
     "lib/deploify/templates/nginx/vhost_http_with_ssl.conf.erb",
     "lib/deploify/templates/passenger/logrotate.conf.erb",
+    "lib/deploify/templates/passenger/passengerctl-lib.erb",
     "lib/deploify/templates/passenger/passengerctl.erb",
-    "deploify.gemspec",
-    "test/helper.rb",
-    "test/test_deploify.rb"
+    "lib/plugins/all.rb",
+    "lib/plugins/apt.rb",
+    "lib/plugins/std.rb"
   ]
   s.homepage = "https://bitbucket.org/richardriman/deploify"
   s.licenses = ["MIT"]
   s.require_paths = ["lib"]
   s.rubygems_version = "1.8.24"
-  s.summary = "Capistrano based, deprec inspired deploy."
+  s.summary = "Capistrano based, deprec inspired deploy"
 
   if s.respond_to? :specification_version then
     s.specification_version = 3
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
       s.add_runtime_dependency(%q<bundler>, [">= 1.0.3"])
-      s.add_runtime_dependency(%q<capistrano>, ["~> 2.13.3"])
-      s.add_runtime_dependency(%q<rvm-capistrano>, ["~> 1.2.6"])
+      s.add_runtime_dependency(%q<capistrano>, ["~> 2.13.5"])
+      s.add_runtime_dependency(%q<rvm-capistrano>, ["~> 1.2.7"])
       s.add_development_dependency(%q<rdoc>, ["~> 3.12"])
       s.add_development_dependency(%q<jeweler>, ["~> 1.8.4"])
       s.add_development_dependency(%q<rcov>, [">= 0"])
     else
       s.add_dependency(%q<bundler>, [">= 1.0.3"])
-      s.add_dependency(%q<capistrano>, ["~> 2.13.3"])
-      s.add_dependency(%q<rvm-capistrano>, ["~> 1.2.6"])
+      s.add_dependency(%q<capistrano>, ["~> 2.13.5"])
+      s.add_dependency(%q<rvm-capistrano>, ["~> 1.2.7"])
       s.add_dependency(%q<rdoc>, ["~> 3.12"])
       s.add_dependency(%q<jeweler>, ["~> 1.8.4"])
       s.add_dependency(%q<rcov>, [">= 0"])
     end
   else
     s.add_dependency(%q<bundler>, [">= 1.0.3"])
-    s.add_dependency(%q<capistrano>, ["~> 2.13.3"])
-    s.add_dependency(%q<rvm-capistrano>, ["~> 1.2.6"])
+    s.add_dependency(%q<capistrano>, ["~> 2.13.5"])
+    s.add_dependency(%q<rvm-capistrano>, ["~> 1.2.7"])
     s.add_dependency(%q<rdoc>, ["~> 3.12"])
     s.add_dependency(%q<jeweler>, ["~> 1.8.4"])
     s.add_dependency(%q<rcov>, [">= 0"])
   end
 end
+
