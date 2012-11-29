@@ -18,6 +18,10 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency "capistrano", "~> 2.13.5"
   gem.add_development_dependency "rvm-capistrano", "~> 1.2.7"
 
+  gem.add_dependency "bundler", ">= 1.0.21"
+  gem.add_dependency "capistrano", "~> 2.13.5"
+  gem.add_dependency "rvm-capistrano", "~> 1.2.7"
+
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
