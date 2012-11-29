@@ -8,8 +8,8 @@ Gem::Specification.new do |gem|
   gem.version       = Deploify::VERSION
   gem.authors       = ["Richard Říman"]
   gem.email         = ["riman.richard@gmail.com"]
-  gem.description   = %q{TODO: Write a gem description}
-  gem.summary       = %q{TODO: Write a gem summary}
+  gem.description   = "deploify - capistrano based and deprec inspired deploy solution served as a gem"
+  gem.summary       = "capistrano based and deprec inspired deploy gem"
   gem.homepage      = "https://github.com/richardriman/deploify"
 
   gem.required_ruby_version = ">= 1.8.7"
