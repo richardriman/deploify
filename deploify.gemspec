@@ -6,7 +6,7 @@ require 'deploify/version'
 Gem::Specification.new do |gem|
   gem.name          = "deploify"
   gem.version       = Deploify::VERSION
-  gem.authors       = ["Richard Říman"]
+  gem.authors       = ["Richard R\314\214i\314\201man"]
   gem.email         = ["riman.richard@gmail.com"]
   gem.description   = "deploify - capistrano based and deprec inspired deploy solution served as a gem"
   gem.summary       = "capistrano based and deprec inspired deploy gem"
