@@ -1,0 +1,9 @@
+#!/bin/bash
+
+APPLICATION=<%= application %>
+APP_PORT=<%= thin_port %>
+RVM_RUBY=<%= rvm_ruby_string %>
+ENVIRONMENT=<%= rails_env %>
+THIN_SERVERS=<%= thin_servers %>
+
+source /usr/local/lib/thinctl $1

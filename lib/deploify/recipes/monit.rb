@@ -10,6 +10,9 @@ Capistrano::Configuration.instance(:must_exist).load do
 
   set :monit_timeout_interval, 120
   set :monit_conf_dir, "/etc/monit/conf.d"
+  # TODO
+  # set :monit_alert_recipients, %w(monitoring@example.com)
+  # set :monit_timeout_recipients, %w(monitoring@example.com)
 
   namespace :deploify do
 

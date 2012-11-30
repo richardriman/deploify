@@ -42,6 +42,8 @@ Capistrano::Configuration.instance(:must_exist).load do
       desc "Install Passenger"
       task :install, :roles => :app do
         # TODO: install passenger things, there's only configuration part yet
+        # run "rvm gemset use global && gem install passenger --no-ri --no-rdoc"
+        # TODO: how to compile standalone passenger?
         config_gen_system
         config_system
       end

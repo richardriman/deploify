@@ -39,13 +39,13 @@ Capistrano::Configuration.instance(:must_exist).load do
   #
   # Service options
   CHOICES_WEBSERVER = [:nginx]
-  CHOICES_APPSERVER = [:passenger, :puma] # :thin, :unicorn
-  CHOICES_DATABASE  = [:mysql, :mongodb]
+  CHOICES_APPSERVER = [:passenger, :thin] # :puma, :unicorn
+  CHOICES_DATABASE  = [:mysql] # :mongodb
   #
   # Service defaults
   set :web_server_type, :nginx
   set :app_server_type, :passenger
-  set :db_server_type,  :mongodb
+  set :db_server_type,  :mysql
 
   # we always use RMV, but we must set :system, because RVM default is :user
   set :rvm_type, :system

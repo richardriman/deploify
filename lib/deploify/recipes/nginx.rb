@@ -47,7 +47,13 @@ Capistrano::Configuration.instance(:must_exist).load do
       task :config_gen_project do
         set :nginx_upstream_name, Digest::SHA1.hexdigest(application)
         if nginx_upstream_servers.empty?
-          set :nginx_upstream_servers, %W(unix:#{shared_path}/pids/#{app_server_type}.sock)
+          if app_server_type.eql?(:passenger)
+            set :nginx_upstream_servers, %W(unix:#{shared_path}/pids/#{app_server_type}.sock)
+          elsif app_server_type.eql?(:thin)
+            upstreams = []
+            set :nginx_upstream_servers,
+                (0..fetch(:thin_servers) - 1).collect { |idx| "unix:#{shared_path}/pids/#{app_server_type}.#{idx}.sock" }
+          end
         end
         project_config_files.each do |file|
           _deploify.render_template(:nginx, file)

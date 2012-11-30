@@ -1,0 +1,84 @@
+USER=app_${APPLICATION}
+APP_DIR=<%= thin_applications_dir %>/${APPLICATION}/current
+
+if [ "${APP_PORT}" = "" ]; then
+  CMD_START="cd ${APP_DIR}; rvm use ${RVM_RUBY}; NOEXEC_DISABLE=1 thin start -s ${THIN_SERVERS} -S tmp/pids/thin.sock -e ${ENVIRONMENT} --stats /thin-status -d"
+  CMD_RESTART="cd ${APP_DIR}; rvm use ${RVM_RUBY}; NOEXEC_DISABLE=1 thin restart -s ${THIN_SERVERS} -S tmp/pids/thin.sock -e ${ENVIRONMENT} --stats /thin-status -d"
+else
+  CMD_START="cd ${APP_DIR}; rvm use ${RVM_RUBY}; NOEXEC_DISABLE=1 thin start -s ${THIN_SERVERS} -p ${APP_PORT} -e ${ENVIRONMENT} --stats /thin-status -d"
+  CMD_RESTART="cd ${APP_DIR}; rvm use ${RVM_RUBY}; NOEXEC_DISABLE=1 thin restart -s ${THIN_SERVERS} -p ${APP_PORT} -e ${ENVIRONMENT} --stats /thin-status -d"
+fi
+
+function running_servers() {
+  return `ls -1 ${APP_DIR}/tmp/pids/thin.*.pid | wc -l`
+}
+
+function start() {
+  echo "Starting thin cluster for application '${APPLICATION}'"
+  # if [ -f ${PIDFILE} ]; then
+  #   kill -0 `cat ${PIDFILE}`
+  #   if [ "$?" == "1" ]; then
+  #     rm ${APP_DIR}/tmp/pids/thin.*
+  #   else
+  #     echo "Thin cluster already running with PID "`cat ${PIDFILE}`
+  #     return 1
+  #   fi
+  # fi
+  su - $USER -c "${CMD_START}"
+}
+
+function stop() {
+  echo "Stopping thin cluster for application '${APPLICATION}'"
+  if [ "${APP_PORT}" == '' ]; then
+    running_servers
+    CMD_STOP="cd ${APP_DIR}; rvm use ${RVM_RUBY}; NOEXEC_DISABLE=1 thin stop -s $? -S tmp/pids/thin.sock"
+  else
+    running_servers
+    CMD_STOP="cd ${APP_DIR}; rvm use ${RVM_RUBY}; NOEXEC_DISABLE=1 thin stop -s $? -p ${APP_PORT}"
+  fi
+  su - $USER -c "${CMD_STOP}"
+}
+
+function restart() {
+  echo "Restarting thin cluster for application '${APPLICATION}'"
+  running_servers
+  if [ ${THIN_SERVERS} -eq $? ]; then
+    echo "RESTART"
+    echo ${CMD_RESTART}
+    su - $USER -c "${CMD_RESTART}"
+  else
+    echo "STOP/START"
+    stop
+    start
+  fi
+}
+
+function graceful() {
+  echo "Restarting thin cluster for application '${APPLICATION}' with one-by-one option"
+  running_servers
+  if [ ${THIN_SERVERS} -eq $? ]; then
+    su - $USER -c "${CMD_RESTART} -O -w 20"
+  else
+    stop
+    start
+  fi
+}
+
+case "$1" in
+  "start")
+    start
+    ;;
+  "stop")
+    stop
+    ;;
+  "restart")
+    restart
+    ;;
+  "graceful")
+    graceful
+    ;;
+  *)
+    echo "Usage: $0 start|stop|restart|graceful" >&2
+    exit 3
+    ;;
+esac

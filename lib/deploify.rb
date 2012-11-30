@@ -1,5 +1,5 @@
 unless Capistrano::Configuration.respond_to?(:instance)
-  abort "Deploify requires Capistrano ~> 2.13.5"
+  abort "Deploify requires Capistrano ~> 2.13.3"
 end
 
 require "#{File.dirname(__FILE__)}/deploify/capistrano_extensions"

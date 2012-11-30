@@ -139,6 +139,7 @@ Capistrano::Configuration.instance(:must_exist).load do
 
       task :set_perms_on_shared_and_release, :roles => :app do
         run "#{sudo} chgrp -R #{app_group} #{shared_path} #{release_path}"
+        run "#{sudo} chown -Rf #{app_user}:#{app_group} #{release_path}/tmp/cache/assets; exit 0"
         run "#{sudo} chmod -R g+w #{shared_path} #{release_path}"
       end
 
