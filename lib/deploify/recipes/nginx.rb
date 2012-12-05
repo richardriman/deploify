@@ -62,7 +62,7 @@ Capistrano::Configuration.instance(:must_exist).load do
 
       desc "Push nginx config files to server, enable (symlink) vhost and logrotate"
       task :config_project, :roles => :web do
-        deploify.push_configs(:nginx, project_config_files)
+        _deploify.push_configs(:nginx, project_config_files)
         if [:http_with_ssl, :http_force_ssl].include?(nginx_vhost_type)
           # SSL is demanded, push certificates
           target_path = "#{deploy_to}/nginx/#{rails_env}"
