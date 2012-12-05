@@ -45,14 +45,14 @@ Capistrano::Configuration.instance(:must_exist).load do
       desc "Generate Thin configs (system level) from template."
       task :config_gen_system do
         SYSTEM_CONFIG_FILES[:thin].each do |file|
-          rfdeploy.render_template(:thin, file)
+          _deploify.render_template(:thin, file)
         end
       end
 
       desc "Generate Thin configs (project level) from template."
       task :config_gen_project do
         PROJECT_CONFIG_FILES[:thin].each do |file|
-          rfdeploy.render_template(:thin, file)
+          _deploify.render_template(:thin, file)
         end
       end
 
@@ -64,12 +64,12 @@ Capistrano::Configuration.instance(:must_exist).load do
 
       desc "Push Thin configs (system level) to server"
       task :config_system, :roles => :app do
-        rfdeploy.push_configs(:thin, SYSTEM_CONFIG_FILES[:thin])
+        _deploify.push_configs(:thin, SYSTEM_CONFIG_FILES[:thin])
       end
 
       desc "Push Thin configs (project level) to server"
       task :config_project, :roles => :app do
-        rfdeploy.push_configs(:thin, PROJECT_CONFIG_FILES[:thin])
+        _deploify.push_configs(:thin, PROJECT_CONFIG_FILES[:thin])
         symlink_logrotate_config
       end
 
@@ -79,8 +79,8 @@ Capistrano::Configuration.instance(:must_exist).load do
 
       task :activate_project, :roles => :app do
         symlink_and_activate_thinctl
-        top.rf_deploy.app.restart
-        top.rf_deploy.web.reload
+        top.deploify.app.restart
+        top.deploify.web.reload
       end
 
       task :symlink_and_activate_thinctl, :roles => :app do
