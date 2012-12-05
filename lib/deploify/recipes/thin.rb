@@ -6,7 +6,7 @@ Capistrano::Configuration.instance(:must_exist).load do
   set :thin_servers,          2
   set :thin_port,             nil # port is optional, if not specified, thin is started as unix socket
 
-  namespace :rf_deploy do
+  namespace :deploify do
 
     namespace :thin do
 
@@ -99,6 +99,6 @@ Capistrano::Configuration.instance(:must_exist).load do
 
     end # namespace :thin
 
-  end # namespace :rf_deploy
+  end # namespace :deploify
 
 end
