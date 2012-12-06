@@ -60,6 +60,13 @@ server {
     error_page 404 = @fallback;
   }
 
+  location ~ ^/assets/ {
+    expires max;
+    add_header Cache-Control public;
+    add_header ETag "";
+    error_page 404 = @fallback;
+  }
+
   location @fallback {
     proxy_pass http://<%= nginx_upstream_name %>;
     proxy_redirect off;
