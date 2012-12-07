@@ -6,20 +6,20 @@ Capistrano::Configuration.instance(:must_exist).load do
 
     namespace :mongodb do
 
-      #removes dump folders on server & local machine
+      desc "removes dump folders on server & local machine"
       task :clean_dump_folders do
         run "rm -rf #{deploy_to}/db/dump"
         system "rm -rf db/dump"
       end
 
-      #creates and gives rights to dump folders on server
+      desc "creates and gives rights to dump folders on server"
       task :prepare_dump_folders do
         run "sudo mkdir -p #{deploy_to}/db/dump"
         run "sudo chmod 777 -R #{deploy_to}/db"
         run "rm -rf #{deploy_to}/db/dump/#{application_base_name}_#{stage}"
       end
 
-      #dumps local db and uploads & restores db on server
+      desc "dumps local db and uploads & restores db on server"
       task :upload do
         prepare_dump_folders
         system "mongodump -d #{application_base_name}_development -o db/dump"
@@ -29,7 +29,7 @@ Capistrano::Configuration.instance(:must_exist).load do
         clean_dump_folders
       end
 
-      #dumps server db and downloads & restores db on local machine
+      desc "dumps server db and downloads & restores db on local machine"
       task :download do
         prepare_dump_folders
         run "mongodump -d #{application_base_name}_#{stage} -o #{deploy_to}/db/dump"

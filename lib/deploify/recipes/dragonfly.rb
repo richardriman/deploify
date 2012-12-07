@@ -9,7 +9,7 @@ Capistrano::Configuration.instance(:must_exist).load do
 
     namespace :dragonfly do
 
-      #synchronizes local files with server files
+      desc "synchronizes local files with server files"
       task :upload do
         target_folder = "#{deploy_to}/shared/public/images"
         source_folder = "public/images"
@@ -18,7 +18,7 @@ Capistrano::Configuration.instance(:must_exist).load do
         system "rsync -e ssh -av #{source_folder}/* #{user}@#{server_ip}:#{target_folder}"
       end
 
-      #synchronizes server files with local files
+      desc "synchronizes server files with local files"
       task :download do
         source_folder = "#{deploy_to}/shared/public/images"
         target_folder = "public/images"
