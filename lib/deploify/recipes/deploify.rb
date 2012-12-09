@@ -40,7 +40,7 @@ Capistrano::Configuration.instance(:must_exist).load do
   # Service options
   CHOICES_WEBSERVER = [:nginx]
   CHOICES_APPSERVER = [:passenger, :thin] # :puma, :unicorn
-  CHOICES_DATABASE  = [:mysql] # :mongodb
+  CHOICES_DATABASE  = [:mysql, :mongodb]
   #
   # Service defaults
   set :web_server_type, :nginx

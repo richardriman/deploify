@@ -85,7 +85,11 @@ Capistrano::Configuration.instance(:must_exist).load do
 
       task :symlink_and_activate_thinctl, :roles => :app do
         run "#{try_sudo} ln -sf #{deploy_to}/thin/thinctl /etc/init.d/thin-#{application}"
-        run "#{try_sudo} update-rc.d thin-#{application} defaults"
+        if fetch(:stage).eql?("staging")
+          run "#{try_sudo} update-rc.d -f thin-#{application} remove"
+        else
+          run "#{try_sudo} update-rc.d thin-#{application} defaults"
+        end
       end
 
       task :symlink_logrotate_config, :roles => :app do
