@@ -6,6 +6,16 @@ Capistrano::Configuration.instance(:must_exist).load do
 
     namespace :mongodb do
 
+      desc "create a database"
+      task :create_database, :roles => :db do
+        # not need anything, DBs are created with the first use
+      end
+
+      desc "grant user access to database"
+      task :grant_user_access_to_database, :roles => :db do
+        # not need anything
+      end
+
       desc "removes dump folders on server & local machine"
       task :clean_dump_folders do
         run "rm -rf #{deploy_to}/db/dump"
