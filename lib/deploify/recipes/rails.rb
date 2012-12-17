@@ -15,6 +15,12 @@ Capistrano::Configuration.instance(:must_exist).load do
   set :rails_env, "production"
   set :shared_dirs, []  # Array of directories that should be created under shared/
                         # and linked to in the project
+  set(:app_server_autostart) do
+    # true if:
+    #   - stage not defined (non-multistaging scenario)
+    #   - stage is defined, but stage is not :staging
+    !exists?(:stage) || (exists?(:stage) && !fetch(:stage).eql?(:staging))
+  end
 
   # hook into the default capistrano deploy tasks
   before "deploy:setup", :except => { :no_release => true } do

@@ -9,7 +9,7 @@ server {
   server_name <%= domain %> <%= Array(web_server_aliases).join(' ') %>;
 
   location / {
-    rewrite ^ https://<%= domain %>$request_uri? permanent;
+    rewrite ^ https://<%= force_domain_with_www ? "www.#{domain}" : domain %>$request_uri? permanent;
   }
 }
 
@@ -25,18 +25,18 @@ server {
   ssl_certificate <%= deploy_to %>/nginx/<%= rails_env %>.crt;
   ssl_certificate_key <%= deploy_to %>/nginx/<%= rails_env %>.key;
 
-  <% if force_domain_with_www -%>
+  <%- if force_domain_with_www -%>
   if ($host !~* ^www.<%= domain %>$) {
     rewrite ^(.*) https://www.<%= domain %>$1 permanent;
   }
-  <% end -%>
+  <%- end -%>
 
   location / {
-    <% if nginx_secured_site -%>
+    <%- if nginx_secured_site -%>
     auth_basic "Limited access";
     auth_basic_user_file <%= "#{deploy_to}/nginx/.htaccess" %>;
-    <% end -%>
-    try_files $uri @upstream;
+    <%- end -%>
+    try_files $uri/index.html $uri @upstream;
   }
 
   location @upstream {
@@ -48,32 +48,31 @@ server {
     proxy_set_header X-Forwarded-Proto https;
   }
 
-  # This allows people to use images and css in their maintenance.html file
+  # this allows people to use images and css in their maintenance.html file
   if ($request_filename ~* \.(css|jpg|gif|png)$) {
     break;
   }
 
-  # Rewrite all the requests to the maintenance.html page if it exists.
+  # rewrite all the requests to the maintenance.html page if it exists
   if (-f $document_root/system/maintenance.html) {
     return 503;
   }
 
-  # set Expire header on assets: see http://developer.yahoo.com/performance/rules.html#expires
+  # set Expire header on assets
   location ~ ^/(images|javascripts|stylesheets)/ {
-    expires max;
-    error_page 404 = @upstream;
+    if ($request_method = GET) {
+      expires 1y;
+    }
   }
-
   location ~ ^/assets/ {
-    expires max;
+    expires 1y;
     add_header Cache-Control public;
     add_header ETag "";
-    error_page 404 = @upstream;
+    break;
   }
 
   error_page 404 /404.html;
   error_page 500 502 504 /500.html;
-
   error_page 503 @503;
   location @503 {
     rewrite  ^(.*)$ /system/maintenance.html break;

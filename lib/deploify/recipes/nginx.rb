@@ -7,7 +7,7 @@ Capistrano::Configuration.instance(:must_exist).load do
   set :nginx_enabled_vhost_dir,     "/etc/nginx/sites-enabled"
   set :nginx_client_max_body_size,  "100M"
   set :nginx_vhost_type,            :http_only
-  set :nginx_vhost_listen_ip,       "0.0.0.0"
+  set :nginx_vhost_listen_ip,       nil
   set :nginx_upstream_servers,      []
   # secured sites stuff
   set :nginx_secured_site,          false
@@ -64,6 +64,13 @@ Capistrano::Configuration.instance(:must_exist).load do
       task :config_project, :roles => :web do
         _deploify.push_configs(:nginx, project_config_files)
         if [:http_with_ssl, :http_force_ssl].include?(nginx_vhost_type)
+          set(:nginx_vhost_listen_ip) do
+            require "resolv"
+            server_ip = Resolv.getaddress(find_servers(roles: :web).first.host)
+            Capistrano::CLI.ui.ask "Enter IP for Nginx zone (needed for scenarios with SSL support) [#{server_ip}]" do |q|
+              q.default = server_ip
+            end
+          end
           # SSL is demanded, push certificates
           target_path = "#{deploy_to}/nginx/#{rails_env}"
           std.su_put(File.read("#{ssl_certs_source_dir}/#{rails_env}.crt"), "#{target_path}.crt", "/tmp", :mode => 0600)

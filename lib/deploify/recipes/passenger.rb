@@ -104,10 +104,10 @@ Capistrano::Configuration.instance(:must_exist).load do
 
       task :symlink_and_activate_passengerctl, :roles => :app do
         run "#{try_sudo} ln -sf #{deploy_to}/passenger/passengerctl /etc/init.d/passenger-#{application}"
-        if exists?(:stage) && fetch(:stage).eql?(:staging)
-          run "#{try_sudo} update-rc.d -f passenger-#{application} remove"
-        else
+        if app_server_autostart
           run "#{try_sudo} update-rc.d passenger-#{application} defaults"
+        else
+          run "#{try_sudo} update-rc.d -f passenger-#{application} remove"
         end
       end
 
