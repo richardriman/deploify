@@ -47,9 +47,8 @@ server {
 
   # set Expire header on assets
   location ~ ^/(images|javascripts|stylesheets)/ {
-    if ($request_method = GET) {
-      expires 1y;
-    }
+    expires 1y;
+    error_page 405 = @upstream;
   }
   location ~ ^/assets/ {
     expires max;
