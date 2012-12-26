@@ -66,7 +66,7 @@ Capistrano::Configuration.instance(:must_exist).load do
         if [:http_with_ssl, :http_force_ssl].include?(nginx_vhost_type)
           set(:nginx_vhost_listen_ip) do
             require "resolv"
-            server_ip = Resolv.getaddress(find_servers(roles: :web).first.host)
+            server_ip = Resolv.getaddress(find_servers(:roles => :web).first.host)
             Capistrano::CLI.ui.ask "Enter IP for Nginx zone (needed for scenarios with SSL support) [#{server_ip}]" do |q|
               q.default = server_ip
             end
