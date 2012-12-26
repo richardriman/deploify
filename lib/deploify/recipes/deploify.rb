@@ -126,6 +126,8 @@ Capistrano::Configuration.instance(:must_exist).load do
 
   on :load, "deploify:connect_canonical_tasks"
 
+  after "staging", "deploify:connect_canonical_tasks"
+
   namespace :deploify do
 
     task :connect_canonical_tasks do
