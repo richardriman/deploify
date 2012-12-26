@@ -58,6 +58,8 @@ Capistrano::Configuration.instance(:must_exist).load do
 
   set :use_monit, true
 
+  set :logrotate_days, 30
+
   # Prompt user for missing values if not supplied
   set(:application) do
     Capistrano::CLI.ui.ask "Enter name of project (no spaces)" do |q|
