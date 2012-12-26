@@ -1,0 +1,12 @@
+<%= shared_path %>/log/<%= rails_env %>.log, <%= shared_path %>/log/thin*.log {
+  daily
+  missingok
+  rotate 30
+  compress
+  delaycompress
+  sharedscripts
+  dateext
+  postrotate
+    touch /usr/sbin/service thin-<%= application %> graceful
+  endscript
+}

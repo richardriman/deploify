@@ -57,7 +57,7 @@ function graceful() {
   echo "Restarting thin cluster for application '${APPLICATION}' with one-by-one option"
   running_servers
   if [ ${THIN_SERVERS} -eq $? ]; then
-    su - $USER -c "${CMD_RESTART} -O -w 20"
+    su - $USER -c "${CMD_RESTART} -O -w 60"
   else
     stop
     start
