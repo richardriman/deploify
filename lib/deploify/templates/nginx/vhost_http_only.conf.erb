@@ -12,6 +12,11 @@ server {
   access_log <%= shared_path %>/log/access.log;
   error_log <%= shared_path %>/log/error.log;
 
+  <%- if force_domain_without_www -%>
+  if ($host !~* ^<%= domain %>$) {
+    rewrite ^(.*) http://<%= domain %>$1 permanent;
+  }
+  <%- end -%>
   <%- if force_domain_with_www -%>
   if ($host !~* ^www.<%= domain %>$) {
     rewrite ^(.*) http://www.<%= domain %>$1 permanent;

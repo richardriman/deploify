@@ -125,6 +125,7 @@ Capistrano::Configuration.instance(:must_exist).load do
 
   # webserver stuff
   set :force_domain_with_www, false
+  set :force_domain_without_www, false
 
   on :load, "deploify:connect_canonical_tasks"
 

@@ -25,6 +25,11 @@ server {
   ssl_certificate <%= deploy_to %>/nginx/<%= rails_env %>.crt;
   ssl_certificate_key <%= deploy_to %>/nginx/<%= rails_env %>.key;
 
+  <%- if force_domain_without_www -%>
+  if ($host !~* ^<%= domain %>$) {
+    rewrite ^(.*) http://<%= domain %>$1 permanent;
+  }
+  <%- end -%>
   <%- if force_domain_with_www -%>
   if ($host !~* ^www.<%= domain %>$) {
     rewrite ^(.*) https://www.<%= domain %>$1 permanent;
