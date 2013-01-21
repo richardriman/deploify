@@ -165,7 +165,9 @@ Capistrano::Configuration.instance(:must_exist).load do
       # database things
 
       set :db_host, "localhost"
-      set :db_socket, "/var/run/mysqld/mysqld.sock"
+      set(:db_socket) do
+        db_server_type.eql?(:mysql) ? "/var/run/mysqld/mysqld.sock" : nil
+      end
       set(:db_adapter) do
         Capistrano::CLI.ui.ask("Enter database adapter") do |q|
           q.default = "mysql2"
