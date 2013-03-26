@@ -1,4 +1,4 @@
-<%= shared_path %>/log/access.log, <%= shared_path %>/log/error.log {
+<%= shared_path %>/log/access.log <%= shared_path %>/log/error.log {
   daily
   missingok
   rotate <%= logrotate_days %>

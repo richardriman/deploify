@@ -1,4 +1,4 @@
-<%= shared_path %>/log/<%= rails_env %>.log, <%= shared_path %>/log/passenger.log {
+<%= shared_path %>/log/<%= rails_env %>.log <%= shared_path %>/log/passenger.log {
   daily
   missingok
   rotate <%= logrotate_days %>
