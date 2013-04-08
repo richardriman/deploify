@@ -52,10 +52,11 @@ server {
 
   # set Expire header on assets
   location ~ ^/(images|javascripts|stylesheets)/ {
-    expires 1y;
+    expires max;
     error_page 405 = @upstream;
   }
   location ~ ^/assets/ {
+    gzip_static on;
     expires max;
     add_header Cache-Control public;
     add_header ETag "";
@@ -122,10 +123,11 @@ server {
 
   # set Expire header on assets
   location ~ ^/(images|javascripts|stylesheets)/ {
-    expires 1y;
+    expires max;
     error_page 405 = @upstream;
   }
   location ~ ^/assets/ {
+    gzip_static on;
     expires max;
     add_header Cache-Control public;
     add_header ETag "";
