@@ -1,7 +1,7 @@
 module Deploify
   MAJOR = 0
   MINOR = 2
-  PATCH = 17
+  PATCH = 18
   BUILD = nil
 
   if BUILD.nil?

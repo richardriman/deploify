@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    deploify (0.2.0)
+    deploify (0.2.18)
       bundler (>= 1.0.21)
       capistrano (~> 2.13.5)
       rvm-capistrano (~> 1.2.7)

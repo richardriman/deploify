@@ -1,4 +1,5 @@
 require "capistrano"
+require "fileutils"
 
 module Deploify
 
