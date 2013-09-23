@@ -11,6 +11,7 @@ Capistrano::Configuration.instance(:must_exist).load do
   set(:app_group) { app_group_prefix + application }
   set(:app_user_homedir) { deploy_to }
   set :database_yml_in_scm, false
+  set :db_pool, 50
   set :app_symlinks, nil
   set :rails_env, "production"
   set :shared_dirs, []  # Array of directories that should be created under shared/
@@ -193,6 +194,7 @@ Capistrano::Configuration.instance(:must_exist).load do
   database: #{db_name}
   encoding: #{db_encoding}
   host:     #{db_host}
+  pool:     #{db_pool}
   socket:   #{db_socket}
 EOF
         std.su_put(database_yml.result, "#{shared_path}/config/database.yml", "/tmp/")
