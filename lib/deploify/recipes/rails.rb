@@ -11,7 +11,7 @@ Capistrano::Configuration.instance(:must_exist).load do
   set(:app_group) { app_group_prefix + application }
   set(:app_user_homedir) { deploy_to }
   set :database_yml_in_scm, false
-  set :db_pool, 50
+  set :db_pool, 5
   set :app_symlinks, nil
   set :rails_env, "production"
   set :shared_dirs, []  # Array of directories that should be created under shared/
