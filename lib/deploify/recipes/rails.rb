@@ -11,7 +11,6 @@ Capistrano::Configuration.instance(:must_exist).load do
   set(:app_group) { app_group_prefix + application }
   set(:app_user_homedir) { deploy_to }
   set :database_yml_in_scm, false
-  set :db_pool, 5
   set :app_symlinks, nil
   set :rails_env, "production"
   set :shared_dirs, []  # Array of directories that should be created under shared/
@@ -178,6 +177,7 @@ Capistrano::Configuration.instance(:must_exist).load do
       set(:db_password) { Capistrano::CLI.ui.ask "Enter database password" }
       set(:db_name) { application }
       set :db_encoding, "utf8"
+      set :db_pool, 5
 
       desc "Link in the production database.yml"
       task :symlink_database_yml, :roles => :app do
