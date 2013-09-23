@@ -9,6 +9,7 @@ Capistrano::Configuration.instance(:must_exist).load do
   set :nginx_vhost_type,            :http_only
   set :nginx_vhost_listen_ip,       nil
   set :nginx_upstream_servers,      []
+  set :nginx_proxy_read_timeout,    0
   # secured sites stuff
   set :nginx_secured_site,          false
   set :nginx_secure_user,           "developer"
