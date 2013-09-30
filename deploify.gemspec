@@ -11,6 +11,7 @@ Gem::Specification.new do |gem|
   gem.description   = "deploify - capistrano based and deprec inspired deploy solution served as a gem"
   gem.summary       = "capistrano based and deprec inspired deploy gem"
   gem.homepage      = "https://github.com/richardriman/deploify"
+  gem.licenses      = ['MIT', 'GPL-2']
 
   gem.required_ruby_version = ">= 1.8.7"
 
