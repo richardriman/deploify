@@ -45,7 +45,7 @@ Capistrano::Configuration.instance(:must_exist).load do
         required configuration files. These should be kept under source control.
         The can be pushed to the server with the :config task.
       DESC
-      task :config_gen_project do
+      task :config_gen_project, :roles => :web do
         set :nginx_upstream_name, Digest::SHA1.hexdigest(application)
         if nginx_upstream_servers.empty?
           if app_server_type.eql?(:passenger)
