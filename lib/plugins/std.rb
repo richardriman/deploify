@@ -41,15 +41,15 @@ module Std
     logger.info file_pattern
     Dir.glob(file_pattern) do |fname|
       if File.readable?(fname) then
-  if MMAP
-    logger.debug "Using Memory Mapped File Upload"
-    fdata=Mmap.new(fname,"r", Mmap::MAP_SHARED, :advice => Mmap::MADV_SEQUENTIAL)
+        if MMAP
+          logger.debug "Using Memory Mapped File Upload"
+          fdata = Mmap.new(fname, "r", Mmap::MAP_SHARED, :advice => Mmap::MADV_SEQUENTIAL)
         else
-    fdata=File.open(fname).read
-  end
-  su_put(fdata, destination, File.join('/tmp',File.basename(fname)), options)
+          fdata = File.open(fname).read
+        end
+        su_put(fdata, destination, File.join('/tmp', File.basename(fname)), options)
       else
-  logger.error "Unable to read file #{fname}"
+        logger.error "Unable to read file #{fname}"
       end
     end
   end
