@@ -50,6 +50,28 @@ Capistrano::Configuration.instance(:must_exist).load do
         end
       end
 
+      desc "removes dump folders on server & local machine"
+      task :clean_dump_folders do
+        run "rm -rf #{deploy_to}/db/dump"
+        system "rm -rf db/dump"
+      end
+
+      desc "creates and gives rights to dump folders on server"
+      task :prepare_dump_folders do
+        run "sudo mkdir -p #{deploy_to}/db/dump"
+        run "sudo chmod 777 -R #{deploy_to}/db"
+        run "rm -rf #{deploy_to}/db/dump/#{application}#{defined?(stage) ? '_'+stage : ''}"
+      end
+
+      desc "dumps server db and downloads & restores db on local machine"
+      task :download do
+        prepare_dump_folders
+        run "mysqldump -u#{application} -p#{db_password} #{application}#{defined?(stage) ? '_'+stage : ''} > #{deploy_to}/db/dump/dump.sql"
+        system "scp #{user}@#{server_ip}:#{deploy_to}/db/dump/dump.sql db/dump"
+        system "mysql -uroot -p #{application}_development < db/dumpdump.sql"
+        clean_dump_folders
+      end
+
     end # namespace :mysql
 
   end # namespace :deploify
