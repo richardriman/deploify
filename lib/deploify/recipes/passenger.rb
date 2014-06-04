@@ -55,14 +55,14 @@ Capistrano::Configuration.instance(:must_exist).load do
       end
 
       desc "Generate Passenger configs (system level) from template."
-      task :config_gen_system do
+      task :config_gen_system, :roles => :app do
         SYSTEM_CONFIG_FILES[:passenger].each do |file|
           _deploify.render_template(:passenger, file)
         end
       end
 
       desc "Generate Passenger configs (project level) from template."
-      task :config_gen_project do
+      task :config_gen_project, :roles => :app do
         PROJECT_CONFIG_FILES[:passenger].each do |file|
           _deploify.render_template(:passenger, file)
         end
@@ -109,6 +109,7 @@ Capistrano::Configuration.instance(:must_exist).load do
         else
           run "#{try_sudo} update-rc.d -f passenger-#{application} remove"
         end
+        _deploify.mkdir(File.join(deploy_to, ".passenger"), owner: app_user, group: user, via: :sudo)
       end
 
       task :symlink_logrotate_config, :roles => :app do
@@ -122,9 +123,25 @@ Capistrano::Configuration.instance(:must_exist).load do
         end
       end
 
+      desc "Start Application"
+      task :start, :roles => :app do
+        if use_monit
+          deploify.monit.activate_project
+        end
+        run "test -d #{current_path} && #{sudo} service passenger-#{application} start; exit 0"
+      end
+
       desc "Restart Application"
       task :restart, :roles => :app do
         run "test -d #{current_path} && #{sudo} service passenger-#{application} restart; exit 0"
+      end
+
+      desc "Stop Application"
+      task :stop, :roles => :app do
+        if use_monit
+          deploify.monit.deactivate_project
+        end
+        run "test -d #{current_path} && #{sudo} service passenger-#{application} stop; exit 0"
       end
 
     end # namespace :passenger
