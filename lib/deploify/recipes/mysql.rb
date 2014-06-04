@@ -60,7 +60,6 @@ Capistrano::Configuration.instance(:must_exist).load do
       task :prepare_dump_folders do
         run "sudo mkdir -p #{deploy_to}/db/dump"
         run "sudo chmod 777 -R #{deploy_to}/db"
-        run "rm #{deploy_to}/db/dump/dump.sql"
       end
 
       desc "dumps server db and downloads & restores db on local machine"
