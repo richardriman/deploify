@@ -118,7 +118,7 @@ Capistrano::Configuration.instance(:must_exist).load do
   # rails deploy GIT stuff
   set :scm, :git
   set :deploy_via, :remote_cache
-  set :copy_exclude, ['.git', '.rvmrc']
+  set :copy_exclude, ['.git', '.rvmrc', '.ruby-gemset', '.ruby-version']
   set(:repository) do
     Capistrano::CLI.ui.ask "Enter repository URL for project"
   end
