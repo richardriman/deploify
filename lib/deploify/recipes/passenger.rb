@@ -109,7 +109,7 @@ Capistrano::Configuration.instance(:must_exist).load do
         else
           run "#{try_sudo} update-rc.d -f passenger-#{application} remove"
         end
-        _deploify.mkdir(File.join(deploy_to, ".passenger"), owner: app_user, group: user, via: :sudo)
+        _deploify.mkdir(File.join(deploy_to, ".passenger"), :owner => app_user, :group => user, :via => :sudo)
       end
 
       task :symlink_logrotate_config, :roles => :app do
